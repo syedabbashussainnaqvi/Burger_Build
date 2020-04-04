@@ -1,7 +1,7 @@
 import React from "react";
 import classes from "./Burger.module.css";
 import BurgerIngredients from "./BurgerIngredients/BurgerIngredients";
-const Burger = props => {
+const Burger = (props) => {
   const keys = Object.keys(props.ingredients);
 
   const showIngredients = keys.map((key, indexes) => {
