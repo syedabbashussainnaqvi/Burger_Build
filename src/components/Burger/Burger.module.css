@@ -3,7 +3,7 @@
     width: 100%;
     margin: auto;
     height: 250px;
-    /* overflow: scroll; */
+    overflow: scroll;
     /*So if height of burger is greater than 250 it enable scrolling instead of cutting it down*/
     text-align: center;
     font-weight: bold;

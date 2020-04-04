@@ -7,12 +7,31 @@ const burgerControl = (props) => {
     return (
       <div key={index} className={classes.BuildControl}>
         <div className={classes.Label}>{item}</div>
-        <button className={classes.More}> More</button>{" "}
-        <button className={classes.Less}> Less</button>
+        <button className={classes.More} onClick={() => props.addHandler(item)}>
+          {" "}
+          More
+        </button>{" "}
+        <button
+          className={classes.Less}
+          onClick={() => props.removeHandler(item)}
+          disabled={
+            props.ingredients[item.toLocaleLowerCase()] === 0 ? true : false
+          }
+        >
+          {" "}
+          Less
+        </button>
       </div>
     );
   });
 
-  return <div className={classes.Wrapper}>{list}</div>;
+  return (
+    <div className={classes.Wrapper}>
+      <div>
+        Current Price: <strong>{props.price}</strong>
+      </div>
+      {list}
+    </div>
+  );
 };
 export default burgerControl;
