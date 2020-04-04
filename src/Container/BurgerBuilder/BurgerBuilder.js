@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import Auxillary from "../../hoc/Auxillary";
 import Burger from "../../components/Burger/Burger";
 import BurgerControl from "../../components/Burger/BurgerControls/BurgerControl";
-
+import Modal from "../../components/UI/Modal/Modal";
+import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 const Ingredients_Price = {
   salad: 0.5,
   meat: 1.4,
@@ -15,6 +16,7 @@ class BurgerBuilder extends Component {
     super(props);
     this.addHandler = this.addHandler.bind(this);
     this.removeHandler = this.removeHandler.bind(this);
+    this.showOrderHandler = this.showOrderHandler.bind(this);
   }
   state = {
     ingredients: {
@@ -24,6 +26,7 @@ class BurgerBuilder extends Component {
       bacon: 0,
     },
     Price: 200,
+    showOrder: false,
   };
 
   addHandler(type) {
@@ -50,18 +53,27 @@ class BurgerBuilder extends Component {
       });
     }
   }
+
+  showOrderHandler() {
+    this.setState({
+      showOrder: !this.state.showOrder,
+    });
+  }
   render() {
     console.log("burgerBuilder Render");
     return (
       <Auxillary>
+        <Modal showOrder={this.state.showOrder}>
+          <OrderSummary ingredients={this.state.ingredients}></OrderSummary>
+        </Modal>
         <Burger ingredients={this.state.ingredients} />
         <BurgerControl
           addHandler={this.addHandler}
           removeHandler={this.removeHandler}
           ingredients={this.state.ingredients}
           price={this.state.Price}
+          showOrderHandler={this.showOrderHandler}
         />
-        <p>Checkout</p>
       </Auxillary>
     );
   }

@@ -31,6 +31,13 @@ const burgerControl = (props) => {
         Current Price: <strong>{props.price}</strong>
       </div>
       {list}
+      <button
+        className={classes.Order}
+        disabled={props.price === 200 ? true : false}
+        onClick={props.showOrderHandler}
+      >
+        ORDER NOW
+      </button>
     </div>
   );
 };

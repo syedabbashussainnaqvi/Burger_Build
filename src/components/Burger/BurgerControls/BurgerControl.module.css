@@ -68,3 +68,10 @@
     background-color: #99703F;
     color: white;
 }
+
+.Order {
+    width: 120px;
+    height: 50px;
+    background-color: #AC9980;
+    cursor: pointer;
+}
