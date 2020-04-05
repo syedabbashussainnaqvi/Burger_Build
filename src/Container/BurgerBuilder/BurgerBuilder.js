@@ -4,6 +4,7 @@ import Burger from "../../components/Burger/Burger";
 import BurgerControl from "../../components/Burger/BurgerControls/BurgerControl";
 import Modal from "../../components/UI/Modal/Modal";
 import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
+import AuthContext from "../../Context/Auth-Context";
 const Ingredients_Price = {
   salad: 0.5,
   meat: 1.4,
@@ -63,17 +64,29 @@ class BurgerBuilder extends Component {
     console.log("burgerBuilder Render");
     return (
       <Auxillary>
-        <Modal showOrder={this.state.showOrder}>
-          <OrderSummary ingredients={this.state.ingredients}></OrderSummary>
-        </Modal>
-        <Burger ingredients={this.state.ingredients} />
-        <BurgerControl
-          addHandler={this.addHandler}
-          removeHandler={this.removeHandler}
-          ingredients={this.state.ingredients}
-          price={this.state.Price}
-          showOrderHandler={this.showOrderHandler}
-        />
+        <AuthContext.Provider
+          value={{
+            showOrder: this.state.showOrder,
+            showOrderHandler: this.showOrderHandler,
+            ingredients: this.state.ingredients,
+            addHandler: this.addHandler,
+            removehandler: this.removeHandler,
+            price: this.state.Price,
+          }}
+        >
+          <Modal>
+            <OrderSummary ingredients={this.state.ingredients}></OrderSummary>
+          </Modal>
+          <Burger ingredients={this.state.ingredients} />
+          <BurgerControl
+            addHandler={this.addHandler}
+            removeHandler={this.removeHandler}
+            ingredients={this.state.ingredients}
+            price={this.state.Price}
+            showOrderHandler={this.showOrderHandler}
+            showOrder={this.state.showOrder}
+          />
+        </AuthContext.Provider>
       </Auxillary>
     );
   }

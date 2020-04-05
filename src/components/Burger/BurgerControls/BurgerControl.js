@@ -8,9 +8,8 @@ const burgerControl = (props) => {
       <div key={index} className={classes.BuildControl}>
         <div className={classes.Label}>{item}</div>
         <button className={classes.More} onClick={() => props.addHandler(item)}>
-          {" "}
           More
-        </button>{" "}
+        </button>
         <button
           className={classes.Less}
           onClick={() => props.removeHandler(item)}
@@ -18,7 +17,6 @@ const burgerControl = (props) => {
             props.ingredients[item.toLocaleLowerCase()] === 0 ? true : false
           }
         >
-          {" "}
           Less
         </button>
       </div>
