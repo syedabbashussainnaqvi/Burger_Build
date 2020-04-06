@@ -60,6 +60,7 @@ class BurgerBuilder extends Component {
       showOrder: !this.state.showOrder,
     });
   }
+
   render() {
     console.log("burgerBuilder Render");
     return (

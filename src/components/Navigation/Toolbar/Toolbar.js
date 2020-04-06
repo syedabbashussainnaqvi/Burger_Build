@@ -6,7 +6,7 @@ import OpenSideBar from "../SideBar/OpenSideBar/OpenSideBar";
 const Toolbar = (props) => {
   return (
     <header className={classes.Toolbar}>
-      <OpenSideBar />
+      <OpenSideBar sideDrawerHandler={props.sideDrawerHandler} />
       <Logo />
       <nav className={classes.screenCheck}>
         <NavigationItem />
