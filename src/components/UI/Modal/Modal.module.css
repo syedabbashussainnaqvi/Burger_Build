@@ -41,10 +41,19 @@ strong {
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
+
+@media (min-width: 300px) {
+    .Modal {
+        width: 200px;
+        left: 20%;
+        height: 450px;
+    }
+}
+
 @media (min-width: 600px) {
     .Modal {
         width: 500px;
-        left: calc(50% -250px);
-        height: 315px;
+        left: 35%;
+        height: 350px;
     }
 }

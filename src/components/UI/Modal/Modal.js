@@ -11,8 +11,10 @@ const Modal = (props) => {
       <p>A delicious burger with following ingredients</p>
       {props.children}
       <p>
-        Continue to Checkout? <strong>Price: {contextProp.price}</strong>
+        {" "}
+        <strong> Total Price: {contextProp.price}</strong>
       </p>
+      <p>Continue to Checkout?</p>
       <Button type="success">CONTINUE</Button>
       <Button type="danger" showOrderHandler={contextProp.showOrderHandler}>
         CANCEL

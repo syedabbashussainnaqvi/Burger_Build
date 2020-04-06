@@ -1,0 +1,26 @@
+.Logo {
+    position: relative;
+    width: 80px;
+    height: 50px;
+    border-radius: 10px;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.Logo1 {
+    margin-bottom: 32px;
+    margin-top: 40px;
+}
+
+@media (min-width:500px) {
+    .Logo {
+        position: relative;
+        width: 100px;
+        height: 50px;
+        border-radius: 10px;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+}
