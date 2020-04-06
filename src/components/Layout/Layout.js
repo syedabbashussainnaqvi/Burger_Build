@@ -16,7 +16,10 @@ const Layout = (props) => {
   return (
     <React.Fragment>
       <Toolbar sideDrawerHandler={sideDrawerHandler} />
-      <SideBar sideDrawer={state.sideDrawer} />
+      <SideBar
+        sideDrawer={state.sideDrawer}
+        sideDrawerHandler={sideDrawerHandler}
+      />
       <main className={Classes.Context}>{props.children}</main>
     </React.Fragment>
   );

@@ -2,6 +2,7 @@ import React from "react";
 import NavigationItem from "../NavigationItem/NavigationItem";
 import classes from "./SideBar.module.css";
 import Logo from "../../Logo/Logo";
+import OpenSideBar from "./OpenSideBar/OpenSideBar";
 
 const SideBar = (props) => {
   const assignedClass = [classes.SideBar];
@@ -12,6 +13,10 @@ const SideBar = (props) => {
   }
   return (
     <div className={assignedClass.join(" ")}>
+      <div onClick={props.sideDrawerHandler}>
+        <OpenSideBar />
+      </div>
+
       <Logo />
       <nav>
         <NavigationItem />
