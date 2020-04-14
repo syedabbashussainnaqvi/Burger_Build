@@ -13,7 +13,6 @@ const Burger = (props) => {
     return wrapper;
   });
 
-  console.log("Burger Render");
   return (
     <div className={classes.Burger}>
       <BurgerIngredients type="bread_top" />

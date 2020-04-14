@@ -5,6 +5,8 @@ import BurgerControl from "../../components/Burger/BurgerControls/BurgerControl"
 import Modal from "../../components/UI/Modal/Modal";
 import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 import AuthContext from "../../Context/Auth-Context";
+import Spinner from "../../components/UI/Spinner/Spinner";
+import Axios from "../../axios-order";
 const Ingredients_Price = {
   salad: 0.5,
   meat: 1.4,
@@ -18,16 +20,13 @@ class BurgerBuilder extends Component {
     this.addHandler = this.addHandler.bind(this);
     this.removeHandler = this.removeHandler.bind(this);
     this.showOrderHandler = this.showOrderHandler.bind(this);
+    this.postOrderHandler = this.postOrderHandler.bind(this);
   }
   state = {
-    ingredients: {
-      salad: 0,
-      meat: 0,
-      cheese: 0,
-      bacon: 0,
-    },
+    ingredients: null,
     Price: 200,
     showOrder: false,
+    posted: false,
   };
 
   addHandler(type) {
@@ -56,15 +55,55 @@ class BurgerBuilder extends Component {
   }
 
   showOrderHandler() {
+    //this  will show modal.js dile jsx
     this.setState({
       showOrder: !this.state.showOrder,
     });
   }
+  postOrderHandler(typr, type) {
+    this.setState({
+      showOrder: type,
+      posted: typr,
+    });
+
+    const queryparam = [];
+
+    for (let i in this.state.ingredients) {
+      queryparam.push(
+        encodeURIComponent(i) +
+          "=" +
+          encodeURIComponent(this.state.ingredients[i])
+      );
+    }
+    queryparam.push("price=" + this.state.Price);
+
+    const queryString = queryparam.join("&");
+    this.props.history.push({
+      pathname: "/checkout",
+      search: "?" + queryString,
+    });
+  }
+  componentDidMount() {
+    Axios.get("/Ingrdients.json")
+      .then((response) => {
+        this.setState({
+          ingredients: response.data,
+        });
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   render() {
-    console.log("burgerBuilder Render");
-    return (
-      <Auxillary>
+    let spinner = null;
+    if (this.state.posted) {
+      spinner = <Spinner />;
+    }
+    let dataLoaded = <h1>Loading Data......</h1>;
+    if (this.state.ingredients) {
+      dataLoaded = (
         <AuthContext.Provider
           value={{
             showOrder: this.state.showOrder,
@@ -73,12 +112,14 @@ class BurgerBuilder extends Component {
             addHandler: this.addHandler,
             removehandler: this.removeHandler,
             price: this.state.Price,
+            posted: this.state.posted,
+            postOrderHandler: this.postOrderHandler,
           }}
         >
           <Modal>
             <OrderSummary ingredients={this.state.ingredients}></OrderSummary>
           </Modal>
-
+          {spinner}
           <Burger ingredients={this.state.ingredients} />
 
           <BurgerControl
@@ -90,8 +131,9 @@ class BurgerBuilder extends Component {
             showOrder={this.state.showOrder}
           />
         </AuthContext.Provider>
-      </Auxillary>
-    );
+      );
+    }
+    return <Auxillary>{dataLoaded}</Auxillary>;
   }
 }
 

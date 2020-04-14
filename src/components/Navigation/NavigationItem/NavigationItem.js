@@ -1,14 +1,16 @@
 import React from "react";
 import classes from "./NavigationItem.module.css";
-
+import { NavLink } from "react-router-dom";
 const NavigationItem = () => {
   return (
     <ul className={classes.header}>
       <li>
-        <a className={classes.active} href="#home">
+        <NavLink to="/" exact activeStyle={{ color: "red" }}>
           Burger Builder
-        </a>
-        <a href="#contact">Checkout</a>
+        </NavLink>
+        <NavLink to="/order" exact activeStyle={{ color: "red" }}>
+          Orders
+        </NavLink>
       </li>
     </ul>
   );

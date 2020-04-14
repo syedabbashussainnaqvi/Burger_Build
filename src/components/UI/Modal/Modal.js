@@ -5,6 +5,7 @@ import AuthContext from "../../../Context/Auth-Context";
 const Modal = (props) => {
   const assignedClass = [classes.Modal, classes.card];
   const contextProp = useContext(AuthContext);
+  console.log("Model" + props);
   const show = (
     <div className={assignedClass.join(" ")}>
       <strong>Your Order</strong>
@@ -15,7 +16,9 @@ const Modal = (props) => {
         <strong> Total Price: {contextProp.price}</strong>
       </p>
       <p>Continue to Checkout?</p>
-      <Button type="success">CONTINUE</Button>
+      <Button type="success" postOrderHandler={contextProp.postOrderHandler}>
+        CONTINUE
+      </Button>
       <Button type="danger" showOrderHandler={contextProp.showOrderHandler}>
         CANCEL
       </Button>

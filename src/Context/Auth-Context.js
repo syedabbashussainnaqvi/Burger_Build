@@ -11,6 +11,8 @@ const auth = React.createContext({
   addHandler: () => {},
   removehandler: () => {},
   price: 200,
+  posted: false,
+  postOrderHandler: () => {},
 });
 
 export default auth;
