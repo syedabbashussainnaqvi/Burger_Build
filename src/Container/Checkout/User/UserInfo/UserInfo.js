@@ -2,51 +2,89 @@ import React, { Component } from "react";
 import Button from "../../../../components/UI/Button/Button";
 import classes from "./UserInfo.module.css";
 import Axios from "../../../../axios-order";
+import Input from "../../../../components/UI/Input/Input";
+import { connect } from "react-redux";
+import * as orderActionCreator from "../../../../store/actions/index";
 
 class UserInfo extends Component {
   state = {
-    name: "",
-    email: "",
-    address: {
-      street: "",
-      postalCode: "",
+    orderForm: {
+      name: {
+        inputtype: "input",
+        elementConfig: {
+          type: "text",
+          placeholder: "Your Name",
+        },
+        value: "",
+        rules: {
+          minLength: 5,
+        },
+      },
+      email: {
+        inputtype: "input",
+        elementConfig: {
+          placeholder: "Your Email",
+          type: "text",
+        },
+        value: "",
+      },
+      street: {
+        inputtype: "input",
+        elementConfig: {
+          placeholder: "Your Street",
+          type: "text",
+        },
+        value: "",
+      },
+      postalCode: {
+        inputtype: "input",
+        elementConfig: {
+          placeholder: "Your Postal Code",
+          type: "text",
+        },
+        value: "",
+      },
+      deliveryMethod: {
+        inputtype: "select",
+        elementConfig: {
+          options: [
+            { value: "fastest", displayValue: "Fastest" },
+            { value: "Medium", displayValue: "Medium" },
+          ],
+        },
+        value: "Fastest",
+      },
     },
   };
 
-  nameHandler = (event) => {
+  validityHandle = (value, identifier) => {
+    //Can be done later
+  };
+
+  inputHandler = (event, identifier) => {
+    console.log(event.target.value + " " + identifier);
+    const updateOrder = { ...this.state.orderForm }; //this will not create deep clone it will give access only to direct values not nested values
+    const propertyInOrder = { ...updateOrder[identifier] };
+    propertyInOrder.value = event.target.value;
+    updateOrder[identifier] = propertyInOrder;
     this.setState({
-      name: event.target.value,
+      orderForm: updateOrder,
     });
   };
-  emailHandler = (event) => {
-    this.setState({
-      email: event.target.value,
-    });
-  };
-  streetHandler = (event) => {
-    this.setState({
-      address: {
-        street: event.target.value,
-      },
-    });
-  };
-  postalCodeHandler = (event) => {
-    this.setState({
-      address: {
-        postalCode: event.target.value,
-      },
-    });
-  };
-  orderHandler = (t1, t2) => {
-    console.log("fuck");
+
+  orderHandler = (event) => {
+    event.preventDefault();
 
     const orderDetail = {
       ingredients: this.props.ingredients,
-      address: this.state.address,
-      name: this.state.name,
-      email: this.state.email,
+      address: this.state.orderForm.street.value,
+      name: this.state.orderForm.name.value,
+      email: this.state.orderForm.email.value,
       price: this.props.price,
+      method: this.state.orderForm.deliveryMethod.value,
     };
+
+    // this.props.orderBurger(orderDetail);
     Axios.post("/orders.json", orderDetail)
       .then((respone) => {
         console.log("Data Submitted");
@@ -58,39 +96,40 @@ class UserInfo extends Component {
   };
 
   render() {
+    const inputs = Object.keys(this.state.orderForm).map((entry, index) => {
+      return (
+        <Input
+          key={index}
+          inputtype={this.state.orderForm[entry].inputtype}
+          elementConfig={this.state.orderForm[entry].elementConfig}
+          changeHandler={(event) => {
+            this.inputHandler(event, entry);
+          }}
+        />
+      );
+    });
+
     return (
       <div className={classes.UserInfo}>
         <h2>Enter User Info</h2>
-
-        <input
-          type="text"
-          name="name"
-          onChange={this.nameHandler}
-          placeholder="Enter Your Name"
-        />
-        <input
-          type="text"
-          name="email"
-          onChange={this.emailHandler}
-          placeholder="Enter Your Email"
-        />
-        <input
-          type="text"
-          name="street"
-          onChange={this.streetHandler}
-          placeholder="Enter Street No"
-        />
-        <input
-          type="text"
-          name="postalCode"
-          placeholder="Enter Your Postal code"
-          onChange={this.postalCodeHandler}
-        />
-        <Button type="success" postOrderHandler={this.orderHandler}>
-          Order
-        </Button>
+        <form onSubmit={this.orderHandler}>
+          {inputs}
+          <Button type="success">Order</Button>
+        </form>
       </div>
     );
   }
 }
-export default UserInfo;
+const mapStateToProps = (state) => {
+  return {
+    ingredients: state.ingredients,
+    price: state.price,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    orderBurger: (orderDetail) =>
+      dispatch(orderActionCreator.orderPassAsync(orderDetail)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(UserInfo);

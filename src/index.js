@@ -4,11 +4,34 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import { createStore, applyMiddleware, compose } from "redux";
+import burgerBuilderReducer from "./store/reducer/burgerBuilder";
+import thunk from "redux-thunk";
+//middleWare
+const logger = (store) => {
+  return (next) => {
+    return (action) => {
+      console.log("Middleware Dispatch: ", action);
+      const result = next(action);
+      console.log("Middleware next state:", store.getState());
+
+      return result;
+    };
+  };
+};
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(
+  burgerBuilderReducer,
+  composeEnhancers(applyMiddleware(logger, thunk))
+);
 
 const app = (
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
+  <Provider store={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>
 );
 ReactDOM.render(
   <React.StrictMode>{app}</React.StrictMode>,

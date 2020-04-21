@@ -46,13 +46,7 @@ class Checkout extends Component {
         />{" "}
         <Route
           path="/checkout/userInfo"
-          render={() => (
-            <UserInfo
-              ingredients={this.state.ingredients}
-              price={this.state.price}
-              {...this.props}
-            />
-          )}
+          render={() => <UserInfo {...this.props} />}
         />
       </div>
     );

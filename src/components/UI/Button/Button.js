@@ -7,7 +7,9 @@ const Button = (props) => {
 
   const buttonHandler = () => {
     if (props.type === "success") {
-      props.postOrderHandler(true, false);
+      if (props.postOrderHandler) {
+        props.postOrderHandler(true, false);
+      }
     } else if (props.type === "danger") {
       props.showOrderHandler();
     }

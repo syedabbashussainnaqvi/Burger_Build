@@ -7,12 +7,8 @@ import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 import AuthContext from "../../Context/Auth-Context";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import Axios from "../../axios-order";
-const Ingredients_Price = {
-  salad: 0.5,
-  meat: 1.4,
-  cheese: 0.4,
-  bacon: 0.7,
-};
+import * as burgerBuilderActionCreator from "../../store/actions/index";
+import { connect } from "react-redux";
 
 class BurgerBuilder extends Component {
   constructor(props) {
@@ -23,34 +19,26 @@ class BurgerBuilder extends Component {
     this.postOrderHandler = this.postOrderHandler.bind(this);
   }
   state = {
-    ingredients: null,
-    Price: 200,
     showOrder: false,
     posted: false,
   };
 
   addHandler(type) {
-    const ingred = { ...this.state.ingredients };
-    const price = this.state.Price + Ingredients_Price[type.toLowerCase()];
-    ingred[type.toLowerCase()] += 1;
-
-    this.setState({
-      ingredients: ingred,
-      Price: price,
-    });
+    this.props.addIngredient(type.toLowerCase());
+    // const ingred = { ...this.state.ingredients };
+    // const price = this.state.Price + Ingredients_Price[type.toLowerCase()];
+    // ingred[type.toLowerCase()] += 1;
+    // this.setState({
+    //   ingredients: ingred,
+    //   Price: price,
+    // });
   }
   removeHandler(type) {
-    const ingred = { ...this.state.ingredients };
-    const price = this.state.Price - Ingredients_Price[type.toLowerCase()];
-    if (ingred[type.toLowerCase()] === 0) {
+    if (this.props.ingredients[type.toLowerCase()] === 0) {
       window.alert("Not Possible " + type + " is already 0");
       console.log("Not Possible");
     } else {
-      ingred[type.toLowerCase()] -= 1;
-      this.setState({
-        ingredients: ingred,
-        Price: price,
-      });
+      this.props.removeIngredient(type.toLowerCase());
     }
   }
 
@@ -68,14 +56,23 @@ class BurgerBuilder extends Component {
 
     const queryparam = [];
 
-    for (let i in this.state.ingredients) {
+    // for (let i in this.props.ingredients) {
+    //   queryparam.push(
+    //     encodeURIComponent(i) +
+    //       "=" +
+    //       encodeURIComponent(this.props.ingredients[i])
+    //   );
+    // }
+
+    Object.keys(this.props.ingredients).map((i) =>
       queryparam.push(
         encodeURIComponent(i) +
           "=" +
-          encodeURIComponent(this.state.ingredients[i])
-      );
-    }
-    queryparam.push("price=" + this.state.Price);
+          encodeURIComponent(this.props.ingredients[i])
+      )
+    );
+
+    queryparam.push("price=" + this.props.price);
 
     const queryString = queryparam.join("&");
     this.props.history.push({
@@ -84,16 +81,17 @@ class BurgerBuilder extends Component {
     });
   }
   componentDidMount() {
-    Axios.get("/Ingrdients.json")
-      .then((response) => {
-        this.setState({
-          ingredients: response.data,
-        });
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    this.props.initIngredients();
+    // Axios.get("/Ingrdients.json")
+    //   .then((response) => {
+    //     this.setState({
+    //       ingredients: response.data,
+    //     });
+    //     console.log(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   }
 
   render() {
@@ -102,31 +100,31 @@ class BurgerBuilder extends Component {
       spinner = <Spinner />;
     }
     let dataLoaded = <h1>Loading Data......</h1>;
-    if (this.state.ingredients) {
+    if (this.props.ingredients) {
       dataLoaded = (
         <AuthContext.Provider
           value={{
             showOrder: this.state.showOrder,
             showOrderHandler: this.showOrderHandler,
-            ingredients: this.state.ingredients,
+            ingredients: this.props.ingredients,
             addHandler: this.addHandler,
             removehandler: this.removeHandler,
-            price: this.state.Price,
+            price: this.props.price,
             posted: this.state.posted,
             postOrderHandler: this.postOrderHandler,
           }}
         >
           <Modal>
-            <OrderSummary ingredients={this.state.ingredients}></OrderSummary>
+            <OrderSummary ingredients={this.props.ingredients}></OrderSummary>
           </Modal>
           {spinner}
-          <Burger ingredients={this.state.ingredients} />
+          <Burger ingredients={this.props.ingredients} />
 
           <BurgerControl
             addHandler={this.addHandler}
             removeHandler={this.removeHandler}
-            ingredients={this.state.ingredients}
-            price={this.state.Price}
+            ingredients={this.props.ingredients}
+            price={this.props.price}
             showOrderHandler={this.showOrderHandler}
             showOrder={this.state.showOrder}
           />
@@ -136,5 +134,22 @@ class BurgerBuilder extends Component {
     return <Auxillary>{dataLoaded}</Auxillary>;
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    ingredients: state.ingredients,
+    price: state.price,
+  };
+};
 
-export default BurgerBuilder;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addIngredient: (ingredientName) =>
+      dispatch(burgerBuilderActionCreator.addIngredients(ingredientName)),
+    removeIngredient: (ingredientName) =>
+      dispatch(burgerBuilderActionCreator.removeIngredients(ingredientName)),
+    initIngredients: () =>
+      dispatch(burgerBuilderActionCreator.initIngredientsBurgerBuilder()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(BurgerBuilder);
