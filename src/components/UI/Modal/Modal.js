@@ -5,7 +5,6 @@ import AuthContext from "../../../Context/Auth-Context";
 const Modal = (props) => {
   const assignedClass = [classes.Modal, classes.card];
   const contextProp = useContext(AuthContext);
-  console.log("Model" + props);
   const show = (
     <div className={assignedClass.join(" ")}>
       <strong>Your Order</strong>

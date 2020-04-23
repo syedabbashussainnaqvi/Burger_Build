@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Button from "../../../../components/UI/Button/Button";
 import classes from "./UserInfo.module.css";
-import Axios from "../../../../axios-order";
 import Input from "../../../../components/UI/Input/Input";
 import { connect } from "react-redux";
 import * as orderActionCreator from "../../../../store/actions/index";
@@ -84,15 +83,23 @@ class UserInfo extends Component {
       method: this.state.orderForm.deliveryMethod.value,
     };
 
-    // this.props.orderBurger(orderDetail);
-    Axios.post("/orders.json", orderDetail)
-      .then((respone) => {
-        console.log("Data Submitted");
-        this.props.history.push({ pathname: "/" });
-      })
-      .catch((error) => {
-        console.log("Error Occur", error);
-      });
+    this.props.orderBurger(orderDetail);
+
+    // if (this.props.successFlag) {
+    //   this.props.setSuccessOrderFlag();
+    //   this.props.history.push({ pathname: "/" });
+    // } else {
+    //   window.alert("Something wrong in error");
+    // }
+
+    // Axios.post("/orders.json", orderDetail)
+    //   .then((respone) => {
+    //     console.log("Data Submitted");
+    //     this.props.history.push({ pathname: "/" });
+    //   })
+    //   .catch((error) => {
+    //     console.log("Error Occur", error);
+    //   });
   };
 
   render() {
@@ -122,14 +129,17 @@ class UserInfo extends Component {
 }
 const mapStateToProps = (state) => {
   return {
-    ingredients: state.ingredients,
-    price: state.price,
+    ingredients: state.burgerBuilder.ingredients,
+    price: state.burgerBuilder.price,
+    successFlag: state.order.successFlag,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
     orderBurger: (orderDetail) =>
       dispatch(orderActionCreator.orderPassAsync(orderDetail)),
+    setSuccessOrderFlag: () =>
+      dispatch(orderActionCreator.setSuccessOrderFlag()),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(UserInfo);

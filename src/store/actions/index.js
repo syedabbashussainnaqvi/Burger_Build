@@ -3,4 +3,10 @@ export {
   removeIngredients,
   initIngredientsBurgerBuilder,
 } from "./burgerBuilder";
-export { orderPassAsync } from "./order";
+export {
+  orderPassAsync,
+  setSuccessOrderFlag,
+  getOrderFromServerAsync,
+} from "./order";
+
+export { authFail, authStart, authSuccess, auth } from "./auth";

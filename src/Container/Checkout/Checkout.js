@@ -1,8 +1,9 @@
 import React from "react";
 import { Component } from "react";
 import CheckoutSummary from "../../components/Checkout/CheckoutSummary/CheckoutSummary";
-import { Route } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
 import UserInfo from "./User/UserInfo/UserInfo";
+import { connect } from "react-redux";
 class Checkout extends Component {
   state = {
     ingredients: {
@@ -37,19 +38,28 @@ class Checkout extends Component {
     });
   }
   render() {
-    return (
-      <div>
-        <CheckoutSummary
-          ingredients={this.state.ingredients}
-          cancelOrder={this.cancelOrder}
-          nextPage={this.nextPage}
-        />{" "}
-        <Route
-          path="/checkout/userInfo"
-          render={() => <UserInfo {...this.props} />}
-        />
-      </div>
-    );
+    let changePage = <Redirect to="/" />;
+    if (!this.props.successOrderFlag) {
+      changePage = (
+        <div>
+          <CheckoutSummary
+            ingredients={this.state.ingredients}
+            cancelOrder={this.cancelOrder}
+            nextPage={this.nextPage}
+          />{" "}
+          <Route
+            path="/checkout/userInfo"
+            render={() => <UserInfo {...this.props} />}
+          />
+        </div>
+      );
+    }
+    return changePage;
   }
 }
-export default Checkout;
+const mapStateToProps = (state) => {
+  return {
+    successOrderFlag: state.order.successFlag,
+  };
+};
+export default connect(mapStateToProps)(Checkout);

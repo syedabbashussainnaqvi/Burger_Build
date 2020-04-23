@@ -44,6 +44,7 @@ class BurgerBuilder extends Component {
 
   showOrderHandler() {
     //this  will show modal.js dile jsx
+    this.props.setSuccessOrderFlag();
     this.setState({
       showOrder: !this.state.showOrder,
     });
@@ -136,8 +137,8 @@ class BurgerBuilder extends Component {
 }
 const mapStateToProps = (state) => {
   return {
-    ingredients: state.ingredients,
-    price: state.price,
+    ingredients: state.burgerBuilder.ingredients,
+    price: state.burgerBuilder.price,
   };
 };
 
@@ -149,6 +150,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(burgerBuilderActionCreator.removeIngredients(ingredientName)),
     initIngredients: () =>
       dispatch(burgerBuilderActionCreator.initIngredientsBurgerBuilder()),
+    setSuccessOrderFlag: () =>
+      dispatch(burgerBuilderActionCreator.setSuccessOrderFlag()),
   };
 };
 

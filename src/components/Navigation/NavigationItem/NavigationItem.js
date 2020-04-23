@@ -11,6 +11,9 @@ const NavigationItem = () => {
         <NavLink to="/order" exact activeStyle={{ color: "red" }}>
           Orders
         </NavLink>
+        <NavLink to="/auth" exact activeStyle={{ color: "red" }}>
+          Authenticate
+        </NavLink>
       </li>
     </ul>
   );
