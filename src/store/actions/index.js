@@ -9,4 +9,4 @@ export {
   getOrderFromServerAsync,
 } from "./order";
 
-export { authFail, authStart, authSuccess, auth } from "./auth";
+export { authFail, authStart, authSuccess, auth, logOut } from "./auth";

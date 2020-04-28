@@ -14,7 +14,6 @@ const Button = (props) => {
       props.showOrderHandler();
     }
   };
-  console.log(props);
   return (
     <button className={assigned.join(" ")} onClick={buttonHandler}>
       {props.children}

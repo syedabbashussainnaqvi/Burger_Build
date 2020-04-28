@@ -1,19 +1,43 @@
 import * as actionType from "../actions/actionType";
 const initialState = {
-  authSuccess: false,
+  token: null,
+  userId: null,
+  error: null,
 };
+
+const authSuccess = (state, action) => {
+  return {
+    ...state,
+    token: action.token,
+    userId: action.userId,
+    error: null,
+  };
+};
+const authFail = (state, action) => {
+  return {
+    ...state,
+    error: action.error,
+  };
+};
+
+const logOut = (state, action) => {
+  return {
+    ...state,
+    token: null,
+    userId: null,
+  };
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionType.authStart:
-      return {
-        // email: action.cred.email,
-        // password: action.cred.password,
-      };
+      return {};
     case actionType.authSuccess:
-      break;
+      return authSuccess(state, action);
     case actionType.authFail:
-      break;
-
+      return authFail(state, action);
+    case actionType.logOut:
+      return logOut(state, action);
     default:
       break;
   }

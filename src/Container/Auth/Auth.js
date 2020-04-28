@@ -4,7 +4,7 @@ import Button from "../../components/UI/Button/Button";
 import classes from "./Auth.module.css";
 import { connect } from "react-redux";
 import * as actionCreator from "../../store/actions/index";
-import * as actionType from "../../store/actions/actionType";
+import { Redirect } from "react-router-dom";
 class Auth extends Component {
   state = {
     control: {
@@ -32,10 +32,10 @@ class Auth extends Component {
         value: "",
       },
     },
+    signIn: true,
   };
 
   inputHandler = (event, identifier) => {
-    console.log(event.target.value + " " + identifier);
     const updateControl = { ...this.state.control }; //this will not create deep clone it will give access only to direct values not nested values
     const propertyInOrder = { ...updateControl[identifier] };
 
@@ -54,8 +54,15 @@ class Auth extends Component {
     event.preventDefault();
     this.props.auth(
       this.state.control.email.value,
-      this.state.control.password.value
+      this.state.control.password.value,
+      this.state.signIn
     );
+    //ingredient ki length dehkni ha
+  };
+  switchHandler = (t, t1) => {
+    this.setState((prevState) => {
+      return { signIn: !prevState.signIn };
+    });
   };
 
   render() {
@@ -72,11 +79,23 @@ class Auth extends Component {
       );
     });
 
+    let isAuth = null; //if user is authticated then redirecting user to root page
+    if (this.props.token) {
+      if (this.props.price > 200) {
+        isAuth = <Redirect to="/checkout" />;
+      } else {
+        isAuth = <Redirect to="/" />;
+      }
+    }
     return (
       <div className={classes.Auth}>
+        {isAuth}
         <form onSubmit={this.submitHandler}>
           {inputs}
           <Button type="success">SUBMIT</Button>
+          <Button type="danger" showOrderHandler={this.switchHandler}>
+            Switch to {this.state.signIn ? "SignUp" : "SignIn"}
+          </Button>
         </form>
       </div>
     );
@@ -84,7 +103,14 @@ class Auth extends Component {
 }
 const mapDispatchToProps = (dispatch) => {
   return {
-    auth: (email, password) => dispatch(actionCreator.auth(email, password)),
+    auth: (email, password, isSignIn) =>
+      dispatch(actionCreator.auth(email, password, isSignIn)),
   };
 };
-export default connect(null, mapDispatchToProps)(Auth);
+const mapStateToProps = (state) => {
+  return {
+    token: state.auth.token != null,
+    price: state.burgerBuilder.price,
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);

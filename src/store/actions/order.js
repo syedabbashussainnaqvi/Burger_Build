@@ -21,9 +21,9 @@ export const setSuccessOrderFlag = () => {
   };
 };
 
-export const orderPassAsync = (orderDetail) => {
+export const orderPassAsync = (orderDetail, token) => {
   return (dispatch) => {
-    Axios.post("/orders.json", orderDetail)
+    Axios.post("/orders.json?auth=" + token, orderDetail)
       .then((respone) => {
         dispatch(orderPass(respone.data, orderDetail));
       })
@@ -39,9 +39,9 @@ export const getOrderFromServer = (orderList) => {
     orderFromServer: orderList,
   };
 };
-export const getOrderFromServerAsync = () => {
+export const getOrderFromServerAsync = (token) => {
   return (dispatch) => {
-    Axios.get("/orders.json").then((request) => {
+    Axios.get("/orders.json?auth=" + token).then((request) => {
       dispatch(getOrderFromServer(request.data));
     });
   };

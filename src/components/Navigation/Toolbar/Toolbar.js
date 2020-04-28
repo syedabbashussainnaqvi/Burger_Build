@@ -9,7 +9,7 @@ const Toolbar = (props) => {
       <OpenSideBar sideDrawerHandler={props.sideDrawerHandler} />
       <Logo />
       <nav className={classes.screenCheck}>
-        <NavigationItem />
+        <NavigationItem token={props.token} />
       </nav>
     </header>
   );

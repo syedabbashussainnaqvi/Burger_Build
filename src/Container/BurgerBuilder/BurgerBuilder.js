@@ -6,7 +6,6 @@ import Modal from "../../components/UI/Modal/Modal";
 import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 import AuthContext from "../../Context/Auth-Context";
 import Spinner from "../../components/UI/Spinner/Spinner";
-import Axios from "../../axios-order";
 import * as burgerBuilderActionCreator from "../../store/actions/index";
 import { connect } from "react-redux";
 
@@ -44,10 +43,16 @@ class BurgerBuilder extends Component {
 
   showOrderHandler() {
     //this  will show modal.js dile jsx
-    this.props.setSuccessOrderFlag();
-    this.setState({
-      showOrder: !this.state.showOrder,
-    });
+    if (this.props.token) {
+      this.props.setSuccessOrderFlag();
+      this.setState({
+        showOrder: !this.state.showOrder,
+      });
+    } else {
+      this.props.history.push({
+        pathname: "/auth",
+      });
+    }
   }
   postOrderHandler(typr, type) {
     this.setState({
@@ -82,7 +87,7 @@ class BurgerBuilder extends Component {
     });
   }
   componentDidMount() {
-    this.props.initIngredients();
+    this.props.initIngredients(); //now we are getting data from redux store
     // Axios.get("/Ingrdients.json")
     //   .then((response) => {
     //     this.setState({
@@ -127,7 +132,7 @@ class BurgerBuilder extends Component {
             ingredients={this.props.ingredients}
             price={this.props.price}
             showOrderHandler={this.showOrderHandler}
-            showOrder={this.state.showOrder}
+            token={this.props.token}
           />
         </AuthContext.Provider>
       );
@@ -139,6 +144,7 @@ const mapStateToProps = (state) => {
   return {
     ingredients: state.burgerBuilder.ingredients,
     price: state.burgerBuilder.price,
+    token: state.auth.token,
   };
 };
 

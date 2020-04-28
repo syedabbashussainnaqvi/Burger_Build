@@ -10,3 +10,4 @@ export const getOrderFromServer = "GETORDERFROMSERVER";
 export const authStart = "AUTHSTART";
 export const authSuccess = "AUTHSUCCESS";
 export const authFail = "AUTHFAIL";
+export const logOut = "LOGOUT";

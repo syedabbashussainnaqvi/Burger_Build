@@ -34,7 +34,7 @@ const burgerControl = (props) => {
         disabled={props.price === 200 ? true : false}
         onClick={props.showOrderHandler}
       >
-        ORDER NOW
+        {props.token ? "ORDER NOW" : "LogIn to Place Order"}
       </button>
     </div>
   );

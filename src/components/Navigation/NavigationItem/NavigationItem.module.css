@@ -2,7 +2,6 @@
     width: 100%;
     box-sizing: border-box;
     margin: 10px 0;
-    display: block;
     list-style: none;
 }
 
@@ -30,9 +29,7 @@ ul li {
     color: black;
 }
 
-.header a.active {
-    color: dodgerblue;
-}
+
 
 @media (min-width:500px) {
 
@@ -52,9 +49,5 @@ ul li {
         border-radius: 4px;
     }
 
-    .header a.active {
-        background-color: dodgerblue;
-        color: white;
-        border-radius: 4px;
-    }
+
 }

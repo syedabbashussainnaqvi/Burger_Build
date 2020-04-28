@@ -15,7 +15,7 @@ const Layout = (props) => {
   };
   return (
     <React.Fragment>
-      <Toolbar sideDrawerHandler={sideDrawerHandler} />
+      <Toolbar sideDrawerHandler={sideDrawerHandler} token={props.token} />
       <SideBar
         sideDrawer={state.sideDrawer}
         sideDrawerHandler={sideDrawerHandler}

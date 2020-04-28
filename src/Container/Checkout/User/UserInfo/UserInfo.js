@@ -83,7 +83,7 @@ class UserInfo extends Component {
       method: this.state.orderForm.deliveryMethod.value,
     };
 
-    this.props.orderBurger(orderDetail);
+    this.props.orderBurger(orderDetail, this.props.token);
 
     // if (this.props.successFlag) {
     //   this.props.setSuccessOrderFlag();
@@ -132,12 +132,13 @@ const mapStateToProps = (state) => {
     ingredients: state.burgerBuilder.ingredients,
     price: state.burgerBuilder.price,
     successFlag: state.order.successFlag,
+    token: state.auth.token,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    orderBurger: (orderDetail) =>
-      dispatch(orderActionCreator.orderPassAsync(orderDetail)),
+    orderBurger: (orderDetail, token) =>
+      dispatch(orderActionCreator.orderPassAsync(orderDetail, token)),
     setSuccessOrderFlag: () =>
       dispatch(orderActionCreator.setSuccessOrderFlag()),
   };
