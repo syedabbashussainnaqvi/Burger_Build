@@ -39,9 +39,13 @@ export const getOrderFromServer = (orderList) => {
     orderFromServer: orderList,
   };
 };
-export const getOrderFromServerAsync = (token) => {
+export const getOrderFromServerAsync = (token, userId) => {
   return (dispatch) => {
-    Axios.get("/orders.json?auth=" + token).then((request) => {
+    console.log(userId);
+    const queryParam =
+      "?auth=" + token + '&orderBy="userId"&equalTo="' + userId + '"';
+
+    Axios.get("/orders.json" + queryParam).then((request) => {
       dispatch(getOrderFromServer(request.data));
     });
   };

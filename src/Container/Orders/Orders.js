@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import * as actionCreator from "../../store/actions/index";
 class Orders extends Component {
   componentDidMount() {
-    this.props.getOrders(this.props.token);
+    this.props.getOrders(this.props.token, this.props.userId);
   }
   render() {
     let spin = <p>Loading Orders.....</p>;
@@ -18,12 +18,13 @@ const mapStateToProps = (state) => {
   return {
     orders: state.order.OrderFromServer,
     token: state.auth.token,
+    userId: state.auth.userId,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    getOrders: (token) =>
-      dispatch(actionCreator.getOrderFromServerAsync(token)),
+    getOrders: (token, userId) =>
+      dispatch(actionCreator.getOrderFromServerAsync(token, userId)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Orders);

@@ -81,6 +81,7 @@ class UserInfo extends Component {
       email: this.state.orderForm.email.value,
       price: this.props.price,
       method: this.state.orderForm.deliveryMethod.value,
+      userId: this.props.userId,
     };
 
     this.props.orderBurger(orderDetail, this.props.token);
@@ -133,12 +134,13 @@ const mapStateToProps = (state) => {
     price: state.burgerBuilder.price,
     successFlag: state.order.successFlag,
     token: state.auth.token,
+    userId: state.auth.userId,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    orderBurger: (orderDetail, token) =>
-      dispatch(orderActionCreator.orderPassAsync(orderDetail, token)),
+    orderBurger: (orderDetail, token, userId) =>
+      dispatch(orderActionCreator.orderPassAsync(orderDetail, token, userId)),
     setSuccessOrderFlag: () =>
       dispatch(orderActionCreator.setSuccessOrderFlag()),
   };
