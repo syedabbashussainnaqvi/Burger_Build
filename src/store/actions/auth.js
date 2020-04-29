@@ -93,7 +93,6 @@ export const authCheckSession = () => {
         );
       }
     } else {
-      console.log("Main else ");
       dispatch(logOut());
     }
   };

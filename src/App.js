@@ -1,13 +1,20 @@
 import React, { Component } from "react";
 import Layout from "./components/Layout/Layout";
 import BurgerBuilder from "./Container/BurgerBuilder/BurgerBuilder";
-import Checkout from "./Container/Checkout/Checkout";
 import { Route, Switch, Redirect } from "react-router-dom";
-import Orders from "./Container/Orders/Orders";
-import Auth from "./Container/Auth/Auth";
 import { connect } from "react-redux";
-import LogOut from "./Container/Auth/Logout/logout";
 import * as actionCreator from "./store/actions/index";
+import asyncComponent from "./hoc/asyncComponent/asyncComponent";
+
+const checkoutLazy = asyncComponent(() =>
+  import("./Container/Checkout/Checkout")
+);
+const logoutLazy = asyncComponent(() =>
+  import("./Container/Auth/Logout/logout")
+);
+const orderLazy = asyncComponent(() => import("./Container/Orders/Orders"));
+const authLazy = asyncComponent(() => import("./Container/Auth/Auth"));
+
 class App extends Component {
   componentDidMount() {
     this.props.authSessionCheck();
@@ -16,7 +23,7 @@ class App extends Component {
     //this process is called guarding the routes
     let changeRouteOnAuth = (
       <Switch>
-        <Route path="/auth" component={Auth} />
+        <Route path="/auth" component={authLazy} />
         <Route path="/" exact component={BurgerBuilder} />
         <Redirect to="/" />
       </Switch>
@@ -24,10 +31,10 @@ class App extends Component {
     if (this.props.token) {
       changeRouteOnAuth = (
         <Switch>
-          <Route path="/checkout" component={Checkout} />
-          <Route path="/order" component={Orders} />
-          <Route path="/auth" component={Auth} />
-          <Route path="/logout" component={LogOut} />
+          <Route path="/checkout" component={checkoutLazy} />
+          <Route path="/order" component={orderLazy} />
+          <Route path="/auth" component={authLazy} />
+          <Route path="/logout" component={logoutLazy} />
           <Route path="/" exact component={BurgerBuilder} />
         </Switch>
       );
